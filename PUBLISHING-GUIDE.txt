@@ -1,0 +1,427 @@
+================================================================================
+HOW TO MAKE EDIT CHANGES LIVE ON THE KONXIS WEBSITE
+(Zero coding — complete step-by-step guide for non-technical use)
+================================================================================
+Website URL (where your changes should appear):
+    https://www.konxis.com/
+
+This guide assumes your edits have already been made on your computer in
+the "public/" folder of the project. Examples of edits you might make:
+  - Change the fact page text or headings (public/index.html, public/contact.html, etc.)
+  - Change colours, fonts, or layout (public/styles.css)
+  - Change the script behaviour (public/main.js)
+  - Change the team image or case-study PDFs (inside public/assets/)
+
+Your live site is served on Cloudflare, and your folder on GitHub is the
+source of truth. Every time you finish edits, you repeat the steps below.
+
+================================================================================
+STEP 0 — What folder to edit and what to look at before you publish
+================================================================================
+- Edit ONLY files inside the "public/" folder.
+- Do NOT edit files in the root folder unless working with the guide
+  author. The root folder contains helper files that are NOT published.
+
+Before you start, open the edited file in a plain text editor and confirm:
+  - The changed text is correct
+  - You did not accidentally delete any HTML tags (tags look like <...>)
+  - The file still opens normally (no strange symbols)
+
+Recommended free text editor: VS Code, Notepad++ or TextMate on Mac.
+For HTML files, a basic text editor is fine. Do not use Word or Pages.
+
+================================================================================
+STEP 1 — Open the project with Git on your computer
+================================================================================
+You need the folder on your computer to be linked to Git. If the folder
+already tracks Git, skip to the checks below.
+
+How to tell if Git is already connected:
+  - There is a ".git" hidden folder inside the project folder, OR
+  - Running "git status" in the folder shows a list of files, OR
+  - You previously saw the message: remote origin set to GitHub
+
+If Git is NOT connected yet, do this once:
+
+1. Install Git from https://git-scm.com/downloads
+2. Open a terminal (Mac) or Git Bash on Windows.
+3. Go to the project folder. Example:
+       cd /Users/you/MyProjects/konxis-website
+   or on Windows:
+       cd "C:\Users\you\MyProjects\konxis-website"
+4. Connect to GitHub with these commands:
+       git init
+       git remote add origin https://github.com/sameersincerejoy-art/KONXIS-WEBSITE.git
+       git branch -M main
+   Important: use your own GitHub username and repository name if they are
+   different from the example above.
+
+After that, your folder is linked to GitHub and can push changes.
+
+================================================================================
+STEP 2 — Make sure you are on the "main" branch and your folder is current
+================================================================================
+Before you commit, run these two commands in the project folder:
+
+   git status
+   git pull origin main
+
+What these do:
+  - git status: tells you which files you have changed.
+  - git pull origin main: downloads any changes from GitHub before your own.
+
+If git pull asks for a password or token, use the GitHub token or the
+GitHub CLI login described in STEP 6.
+
+Good sign: git pull says "already up to date".
+
+================================================================================
+STEP 3 — Check exactly what you changed (always do this)
+================================================================================
+Run this command in the project folder:
+
+   git status
+
+You should see your changed files listed, for example:
+   M public/index.html
+   M public/contact.html
+   M public/sitemap.xml
+
+"M" means "modified" — the file on your computer differs from GitHub.
+
+If you see files you did NOT intend to change, stop here and ask before
+committing. Unwanted changes are easiest to fix before they go live.
+
+Optional: to view the exact lines you changed, run:
+   git diff public/index.html
+   git diff public/contact.html
+   (repeat for each file)
+
+"git diff" shows lines with a leading "+" for what you added and "-" for
+what was removed. Read through it once to confirm the edits are what you
+intended. Close the diff with "q" when finished.
+
+================================================================================
+STEP 4 — Save your changes as a named snapshot (commit)
+===================================
+Committing is the Git way of saying "I am saving these edits with a
+note describing what I changed."
+
+Run (one command, all on one line):
+
+   git add -A
+
+Then run:
+
+   git commit -m "Your message here"
+
+Write a short, clear message in place of "Your message here". Use plain
+English and say what the change is, not a verdict.
+
+Good examples:
+   "Update contact page: add Ahmedabad location and scheduling note"
+   "Fix canonical URLs to www.konxis.com and correct sitemap lastmod"
+   "Refresh About page intro and team caption"
+
+Bad examples:
+   "update"
+   "fixes"
+   "final"
+   "please push"
+
+If the commit succeeds, Git prints a line beginning with "[main ...]" and
+your message. That means the snapshot is saved locally and ready to push.
+
+If Git rejects the commit with "nothing added to commit", it usually means
+git add did not pick up any new changes. Check git status and confirm the
+files show "M". If a file shows "??", run "git add <file>" for it first.
+
+================================================================================
+STEP 5 — Send the commit to GitHub (push)
+===================================
+Run:
+
+   git push origin main
+
+First time or after a fresh connection, you may be asked to authenticate.
+Two common, simple ways:
+
+Option A — GitHub CLI (recommended if installed):
+   1. Install GitHub CLI from https://cli.github.com/
+   2. Run "gh auth login" once
+   3. Choose HTTPS, paste personal access token or browser login
+   4. Then "git push origin main" works without a password prompt
+
+Option B — GitHub personal access token:
+   1. On GitHub, go to Settings → Developer settings → Personal access tokens
+      (classic) and create a token with "repo" scope.
+   2. When prompted for a password, paste that token instead of your GitHub
+      password. The token acts like a password for Git over HTTPS.
+
+Option C — if your computer already has a credential helper set up, push
+may just work without any prompt.
+
+What success looks like:
+   remote: ...
+   To https://github.com/sameersincerejoy-art/KONXIS-WEBSITE.git
+      <old-commit>..<new-commit>  main -> main
+
+If you see errors like "Permission denied (publickey)" or "Authentication
+failed", you are being asked for credentials. Use Option A or B above.
+
+If you see "error: failed to push some refs" with a message about the
+remote having work you do not, run "git pull --rebase origin main" first,
+resolve any conflicts if shown, then push again. This very rarely happens
+if you pull before editing.
+
+================================================================================
+STEP 6 — Confirm the change reached GitHub
+==================================
+Within a minute or two, go to:
+
+   https://github.com/sameersincerejoy-art/KONXIS-WEBSITE
+
+(Replace with your own repository page if the name differs.)
+
+Check:
+  - The commit with your message now appears in the list of commits
+  - The files you edited show your new text when you open them
+
+If the commit is there but the changed text is not, the problem is local
+before publishing: go back to STEP 3 and STEP 4.
+
+================================================================================
+STEP 7 — Wait for Cloudflare to build the live site
+==============================================
+After your push, Cloudflare rebuilds the site automatically.
+
+Typical time: under 2 to 5 minutes.
+During this time the live site may briefly show the previous version.
+
+How to watch:
+  - Cloudflare dashboard → "Workers & Pages"
+  - Open your Konxis project
+  - Look at "Deployments" — you should see a new deployment in progress,
+    then a green "Completed" status for the latest commit.
+
+If you do not see the new deployment after 10 minutes, refresh the
+dashboard once. If it still is not there, move to STEP 8.
+
+Note about "submodule" errors from earlier:
+  The project history has an earlier commit that fixed a Git submodule
+  clone problem. If a future build ever fails with "submodule" in the
+  message, mention that to the guide author and do not retry many times.
+  It is usually fixed by removing the submodule reference from the repo,
+  not by you doing build steps.
+
+================================================================================
+STEP 8 — If Cloudflare does not auto-deploy, deploy manually
+============================================================
+If the project is connected to Cloudflare via Workers/Deploy button, you
+have two manual fallbacks.
+
+Fallback 1 — Retry from the dashboard:
+  1. Cloudflare dashboard → your Konxis site project
+  2. Deployments
+  3. Look for "Create deployment" or "Retry deployment"
+  4. Choose the latest commit on main and confirm
+
+Fallback 2 — Use wrangler from your computer (only if the project uses a
+wrangler build):
+  1. Install Node.js from https://nodejs.org/ if not already installed
+  2. Open a terminal in the project folder
+  3. Run:
+       npx wrangler login
+     and follow the browser login prompt
+  4. Deploy with:
+       npx wrangler deploy
+  This uploads the site and marks it live.
+
+If neither works, screenshot the error and send it back for guidance.
+Do not edit Cloudflare settings you do not recognise.
+
+================================================================================
+STEP 9 — Verify the live site after deployment
+=====================================
+After the deployment status is "Completed", test the live site.
+
+Basic checks to perform each time you publish:
+  - Open https://www.konxis.com/
+  - Open the specific page you changed (example: /contact.html)
+  - Scroll to the part you changed and confirm the new text is visible
+  - Confirm the page still looks normal (no broken layout, missing image,
+    or missing headings)
+  - Click one or two links to make sure they still work
+  - On contact.html, confirm the location and scheduling note read as you
+    intend
+  - If you changed the team image or PDFs, try opening them from the live
+    page
+
+If the live page still shows old text after the deployment is complete,
+browsers can cache old HTML. Try:
+  - Hard refresh: Windows Ctrl+F5, Mac Cmd+Shift+R
+  - Or open the same page in a private/incognito window
+  - Or view the page source:
+       In Chrome: right-click the page → "View page source"
+       Confirm the new text appears in the source
+
+If the live page source still shows old text, the deployment did not pick
+up your commit. Return to STEP 7 and STEP 8.
+
+================================================================================
+STEP 10 — Cache and "my change is not showing" first remedies
+===============================================================
+Most "I changed it but I don't see it" situations are caused by cache,
+not by a failed publish.
+
+Try in this order:
+  1. Hard refresh the page (Ctrl+F5 / Cmd+Shift+R)
+  2. Open the page in a private/incognito window
+  3. View page source — is the text there in the source file?
+     - If YES: the publish worked; the issue is your browser cache.
+     - If NO: the publish likely did not deploy. Check GitHub STEP 6 and
+       Cloudflare STEP 7 and STEP 8.
+  4. If still stuck, purge Cloudflare cache:
+       Cloudflare dashboard → Caching → Configuration → Purge Everything
+
+After purging, wait 1 to 2 minutes and check again.
+
+================================================================================
+STEP 11 — Canonical domain and apex redirect (one-time setup)
+============================================================
+Your site's editable data already points canonical references to
+www.konxis.com. Two hostnames currently serve the same content:
+
+  - https://konxis.com/        (apex, no www)
+  - https://www.konxis.com/    (canonical)
+
+If both serve identical pages, search engines can see the site twice.
+To make www the single live version, add one redirect in Cloudflare.
+
+One-time setup in Cloudflare (do once, not every publish):
+  1. Cloudflare dashboard → select the konxis.com zone
+  2. Go to Rules → Redirect Rules
+  3. Create a rule:
+       If hostname equals "konxis.com"
+       Then dynamic redirect to "https://www.konxis.com/$1" with status 301
+  4. Save
+
+After that, anyone visiting konxis.com is redirected to www.konxis.com.
+This is a separate one-time DNS/routing step and does not affect your
+publish workflow.
+
+================================================================================
+STEP 12 — Publishing checklist to use every time
+=============================================
+Use this short checklist each time you publish.
+
+BEFORE committing:
+  [ ] I edited files only inside public/
+  [ ] I opened each changed file and checked the text
+  [ ] git status shows only the files I intended to change
+  [ ] git diff looks right for each file (optional but helpful)
+
+AT commit time:
+  [ ] git add -A was run
+  [ ] git commit -m "clear message" succeeded
+  [ ] commit message describes the actual change
+
+AT push time:
+  [ ] git push origin main succeeded (no errors)
+  [ ] GitHub shows the new commit
+
+AFTER Cloudflare deploy:
+  [ ] Deployment status is "Completed"
+  [ ] Live page shows the new text (use hard refresh or incognito)
+  [ ] Page source contains the new text
+  [ ] Links and images on changed pages still work
+
+If any checkbox cannot be ticked, stop and ask before continuing.
+
+================================================================================
+STEP 13 — Safe edits vs. edits to ask about first
+=============================================
+SAFE to change yourself (these are just content):
+  - Any text inside public/index.html
+  - Any text inside public/about.html, public/contact.html, etc.
+  - sitemap.xml only if you are updating lastmod dates
+  - main.js only if you know the script change is intentional and small
+  - styles.css for obvious colour, font-size, margin edits, as long as the
+    file is still valid CSS
+
+ASK before changing:
+  - Moving files between folders
+  - Renaming files that are linked from other pages
+  - Deleting images, PDFs, or referenced assets
+  - Any file outside public/
+  - Root files: index.js, worker.js, deploy.json, wrangler config
+  - Anything in the ".git" folder
+  - Anything you are not sure is being published
+
+If you are unsure whether a change is safe, save your edit in the file,
+do NOT commit yet, and ask first. That prevents accidental breakages.
+
+================================================================================
+STEP 14 — Updating the team image or PDFs
+=========================================
+The team image lives at:
+  public/assets/images/team.jpg
+
+Case-study PDFs live at:
+  public/assets/*.pdf
+
+To update them:
+  1. Replace the file in public/assets/ with your new file (same filename,
+     or update the link in the HTML page if the filename changes).
+  2. If the filename changed, update the matching link in the HTML page
+     that references it (for example, the case-studies page).
+  3. Follow STEP 1 through STEP 6 to publish.
+  4. Verify the new file is reachable on the live site after deployment.
+
+Important: keep filenames lowercase, avoid spaces, and avoid special
+characters. Good filenames:
+  team.jpg, team-new.jpg, cam-follower-study.pdf
+
+Avoid filenames like:
+  My Photo (1).jpg, Bracket Study (Final!).pdf
+
+================================================================================
+STEP 15 — How often to publish and what to avoid
+==============================================
+Publish as soon as your edits are final. There is no need to batch many
+unrelated edits before pushing, but it is fine to bundle a single topic,
+for example "update Contact page".
+
+Avoid these common mistakes:
+  - Pushing from a branch other than main
+  - Pushing without pulling first when several people edit
+  - Committing files outside public/ by accident
+  - Commit message saying "update" without detail
+  - Hard-refreshing only on one page and assuming the whole site updated
+  - Editing Cloudflare settings you do not understand
+  - Deleting files referenced by other pages
+
+================================================================================
+STEP 16 — Quick reference card (print or save)
+=============================================
+Every publication, in order:
+
+1. Edit files in public/
+2. git status                       (check changed files)
+3. git diff <file>                  (review changes, optional)
+4. git pull origin main             (fetch latest)
+5. git add -A
+6. git commit -m "clear message"
+7. git push origin main
+8. Open GitHub → confirm commit is there
+9. Wait for Cloudflare deployment to finish
+10. Visit https://www.konxis.com/ and your changed page
+11. Hard refresh or use incognito if old text shows
+12. If still old: view page source, then purge Cloudflare cache
+13. Celebrate, or fix the one remaining issue and repeat from step 2
+
+================================================================================
+If anything in this guide fails, stop at the step that failed and send
+back the exact command you ran and the exact error text. That is the
+fastest way to get the next correct step.
+================================================================================

@@ -51,7 +51,7 @@
   var form = document.getElementById("intake-form");
   if (form) {
     var status = document.getElementById("form-status");
-    var EMAIL = "hello@konxis.in";
+    var EMAIL = "consult@konxis.com";
 
     var setStatus = function (msg, isError, invalidEl) {
       if (!status) return;
@@ -109,7 +109,7 @@
       }
 
       var subject = "Engineering enquiry — " + (data.get("Company") || data.get("Name") || "Konxis website");
-      var body = lines.join("\n") + "\n---\nSent from konxis.in contact form";
+      var body = lines.join("\n") + "\n---\nSent from the Konxis Engineering contact form";
       var mailto = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 
       setStatus("Opening your email client with the enquiry prepared for " + EMAIL + ". If nothing opens, email us directly.", false);
